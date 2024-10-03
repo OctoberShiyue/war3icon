@@ -1,6 +1,8 @@
 // Script run within the webview itself.
 const vscode = acquireVsCodeApi();
-// window.addEventListener("load", main);
+window.addEventListener("load", function () {
+	updateData("");
+});
 
 function updateData(value) {
 	console.log(value);
