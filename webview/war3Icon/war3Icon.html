@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<script src="war3Icon.js"></script>
+	<link href="war3Icon.css" rel="stylesheet" />
+	<title>War3图标</title>
+</head>
+
+<body>
+	<div class="search">
+		<div class="texture-type-content">
+			<input class="texture-type selected" type="button" name="texture-type" value="ability" onclick="toggleType(this)">
+			<input class="texture-type" type="button" name="texture-type" value="item" onclick="toggleType(this)">
+			<input class="texture-type" type="button" name="texture-type" value="spell" onclick="toggleType(this)">
+			<input class="texture-type" type="button" name="texture-type" value="inv" onclick="toggleType(this)">
+			<input class="texture-type" type="button" name="texture-type" value="weapon" onclick="toggleType(this)">
+		</div>
+		<div class="search-content">
+			<input id="filter" type="text" placeholder="搜索，只能搜索英文关键字" oninput="onInput()">
+		</div>
+		<!-- <i class="fa fa-cog" style="font-size:36px"></i> -->
+	</div>
+	<div id="texture-content">
+		<!-- 用于代码替换的内容 -->
+		<div>__replace__</div>
+	</div>
+	<div id="item-texture-content">
+		<!-- 用于代码替换的内容 -->
+		<div>__replace__</div>
+	</div>
+</body>
+
+</html>
