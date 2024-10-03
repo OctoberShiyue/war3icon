@@ -6,6 +6,8 @@ window.addEventListener("load", function () {
 
 function updateData(value) {
 	console.log(value);
+	const content = document.getElementById("texture-content");
+	content.innerHTML = value;
 }
 
 function checkEnter(event) {
