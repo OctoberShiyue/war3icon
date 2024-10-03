@@ -19,7 +19,7 @@
 			<input class="texture-type" type="button" name="texture-type" value="weapon" onclick="toggleType(this)">
 		</div>
 		<div class="search-content">
-			<input id="filter" type="text" placeholder="搜索，只能搜索英文关键字" oninput="onInput()">
+			<input id="filter" type="text" placeholder="搜索，只能搜索英文关键字" onkeydown="checkEnter(event)" >
 		</div>
 	</div>
 	<div id="texture-content">

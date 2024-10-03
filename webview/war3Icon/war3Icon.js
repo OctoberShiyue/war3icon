@@ -2,41 +2,27 @@
 const vscode = acquireVsCodeApi();
 // window.addEventListener("load", main);
 
-function onInput() {
+function updateData(value) {
+	console.log(value);
+}
+
+function checkEnter(event) {
 	const filter = document.getElementById("filter");
-	let filterWord = filter.value;
-	let allIcon = document.querySelectorAll('.icon');
-	for (const element of allIcon) {
-		let filterArr = filterWord.split(" ");
-		let display = "none";
-		const zhCN = element.getAttribute("data-abilityName") ?? "";
-		for (const word of filterArr) {
-			if (word !== '' && element.id.search(word) === -1 && zhCN != undefined && zhCN.search(word) === -1) {
-				display = 'none';
-			} else {
-				display = '';
-			}
-		}
-		element.style.display = display;
+	if (event.keyCode === 13) { // 检查 Enter 键
+		let filterWord = filter.value;
+		updateData(filterWord);
 	}
 }
+
 function toggleType(btn) {
 	let allBtn = document.querySelectorAll('.texture-type');
+	const filter = document.getElementById("filter");
 	for (const iterator of allBtn) {
 		iterator.className = 'texture-type';
 	}
 	btn.className = 'texture-type selected';
-}
-function heroFilter(img, heroName) {
-	const filter = document.getElementById("filter");
-	if (heroName === 'base') {
-		filter.value = '';
-	} else {
-		filter.value = heroName;
-	}
-	const heroFilter = document.getElementById("hero-filter");
-	heroFilter.src = img.src;
-	onInput();
+	filter.value = btn.value;
+	updateData(btn.value);
 }
 document.oncontextmenu = function (event) {
 	event.preventDefault();
