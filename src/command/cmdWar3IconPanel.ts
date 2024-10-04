@@ -5,7 +5,7 @@ import * as path from 'path';
 import { exec } from 'child_process';
 import axios from 'axios';
 import { getWebviewContent } from '../utils/getWebViewContent';
-import blp2Image from './helper/blp2img';
+import { blp2Image, mergeImages } from './helper/blp2img';
 import { getRootPath } from "../utils/getRootPath";
 import { downHttpFile } from "../utils/fileUtils";
 
@@ -76,23 +76,23 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 			case "down_file_to_blp":	// 下载文件，并转成blp
 				let rootPath = getRootPath();
 				let pngPath = rootPath + "/resource/ReplaceableTextures/CommandButtons/" + message.filename;
-				let blpPath = rootPath + "/resource/ReplaceableTextures/CommandButtons/BTN" + message.filename.substring(0, message.filename.length - 4) + ".blp";
-				let blpPasPath = rootPath + "/resource/ReplaceableTextures/PassiveButtons/PASBTN" + message.filename.substring(0, message.filename.length - 4) + ".blp";
-				let blpDisPath = rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled/DISBTN" + message.filename.substring(0, message.filename.length - 4) + ".blp";
-				console.log(pngPath, "=>", blpPath);
 				downHttpFile(text, pngPath, function (code: number) {
 					if (code === 1) {
+						let btn_name = message.filename.substring(0, message.filename.length - 4);
+						let btn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_btn.png", rootPath + "/resource/ReplaceableTextures/CommandButtons/BTN" + btn_name + ".png");
+						blp2Image(btn_png_path, btn_png_path.substring(-4) + ".blp", 'blp');
+						fs.unlink(btn_png_path, () => { });
+
+						let pasbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_pas.png", rootPath + "/resource/ReplaceableTextures/PassiveButtons/PASBTN" + btn_name + ".png");
+						blp2Image(pasbtn_png_path, pasbtn_png_path.substring(-4) + ".blp", 'blp');
+						fs.unlink(pasbtn_png_path, () => { });
+
+						let disbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_dis.png", rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled/DISBTN" + btn_name + ".png");
+						blp2Image(disbtn_png_path, disbtn_png_path.substring(-4) + ".blp", 'blp');
+						fs.unlink(disbtn_png_path, () => { });
+
+						fs.unlink(pngPath, () => { });
 						vscode.window.showInformationMessage(message.filename + `下载完成`);
-						blp2Image(pngPath, blpPath, 'blp');
-						blp2Image(pngPath, blpPasPath, 'blp');
-						blp2Image(pngPath, blpDisPath, 'blp');
-						fs.unlink(pngPath, (err) => {
-							if (err) {
-								console.log(`删除失败: ${err.message}`);
-							} else {
-								console.log(`文件已删除: ${pngPath}`);
-							}
-						});
 					}
 				});
 				// console.log(text,message.filename);

@@ -39,4 +39,5 @@ export function mergeImages(imagePath1: string, imagePath2: string, outputPath: 
     img3.loadFromBuffer(buf1, 0, buf1.length);
     img3.drawImage(img2,0,0);
     fs.writeFileSync(outputPath, img3.toBuffer(TYPE_PNG));
+    return outputPath;
 }
