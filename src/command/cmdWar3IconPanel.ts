@@ -5,6 +5,9 @@ import * as path from 'path';
 import { exec } from 'child_process';
 import axios from 'axios';
 import { getWebviewContent } from '../utils/getWebViewContent';
+import blp2Image from './helper/blp2img';
+import { getRootPath } from "../utils/getRootPath";
+import { downHttpFile } from "../utils/fileUtils";
 
 
 export async function war3IconPanel(context: vscode.ExtensionContext) {
@@ -47,9 +50,9 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 						}
 					}
 				}
-				console.log("更新数据", value, page,response.data.data.last_page);
+				console.log("更新数据", value, page, response.data.data.last_page);
 
-				panel.webview.postMessage({ type: 'updateitems', text: replaceText , last_page:response.data.data.last_page });
+				panel.webview.postMessage({ type: 'updateitems', text: replaceText, last_page: response.data.data.last_page });
 			});
 			return html;
 		});
@@ -58,7 +61,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 	update_html_data("");
 
 	// 监听消息
-	panel.webview.onDidReceiveMessage(async (message: { type: string, text: string; page: number }) => {
+	panel.webview.onDidReceiveMessage(async (message: { type: string, text: string, page: number, filename: string }) => {
 		console.log(message);
 
 		const type = message.type;
@@ -70,6 +73,31 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 				update_html_data(text, page);
 				panel.webview.postMessage({ type: 'updateitemsfull' });
 				return;
+			case "down_file_to_blp":	// 下载文件，并转成blp
+				let rootPath = getRootPath();
+				let pngPath = rootPath + "/resource/ReplaceableTextures/CommandButtons/" + message.filename;
+				let blpPath = rootPath + "/resource/ReplaceableTextures/CommandButtons/BTN" + message.filename.substring(0, message.filename.length - 4) + ".blp";
+				let blpPasPath = rootPath + "/resource/ReplaceableTextures/PassiveButtons/PASBTN" + message.filename.substring(0, message.filename.length - 4) + ".blp";
+				let blpDisPath = rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled/DISBTN" + message.filename.substring(0, message.filename.length - 4) + ".blp";
+				console.log(pngPath, "=>", blpPath);
+				downHttpFile(text, pngPath, function (code: number) {
+					if (code === 1) {
+						vscode.window.showInformationMessage(message.filename + `下载完成`);
+						blp2Image(pngPath, blpPath, 'blp');
+						blp2Image(pngPath, blpPasPath, 'blp');
+						blp2Image(pngPath, blpDisPath, 'blp');
+						fs.unlink(pngPath, (err) => {
+							if (err) {
+								console.log(`删除失败: ${err.message}`);
+							} else {
+								console.log(`文件已删除: ${pngPath}`);
+							}
+						});
+					}
+				});
+				// console.log(text,message.filename);
+				return;
+
 		}
 
 	}, null, context.subscriptions);
@@ -77,4 +105,10 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 	panel.onDidDispose(() => {
 
 	}, null, context.subscriptions);
+
+	//宿主项目路径
+	console.log("宿主项目路径：", getRootPath());
+
+	// blp2Image("C:\\Users\\oob\\Desktop\\65c19b8260cba5d706b5b10d066a759b.png", distPath.fsPath, 'png');
+	// blp2Image("C:\\Users\\oob\\Desktop\\65c19b8260cba5d706b5b10d066a759b.png", "C:\\Users\\oob\\Desktop\\65c19b8260cba5d706b5b10d066a759b.blp", 'blp');
 }

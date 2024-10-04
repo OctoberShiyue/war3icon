@@ -49,6 +49,15 @@ function toggleType(btn) {
 	filter.value = btn.value;
 	updateData(btn.value);
 }
+
+function filter(btn,filename) {
+	vscode.postMessage({
+		type: 'down_file_to_blp',
+		text: btn.src,
+		filename:filename,
+	});
+}
+
 document.oncontextmenu = function (event) {
 	event.preventDefault();
 };
