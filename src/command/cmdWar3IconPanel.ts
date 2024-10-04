@@ -116,3 +116,9 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 	// blp2Image("C:\\Users\\oob\\Desktop\\65c19b8260cba5d706b5b10d066a759b.png", distPath.fsPath, 'png');
 	// blp2Image("C:\\Users\\oob\\Desktop\\65c19b8260cba5d706b5b10d066a759b.png", "C:\\Users\\oob\\Desktop\\65c19b8260cba5d706b5b10d066a759b.blp", 'blp');
 }
+
+//剩下：
+/**
+ * 按下按钮，打开文件对话框，可以选定自定义的png，进行blp转换
+ * btn,pas,dis框框自定义替换，可以多方案呢配置
+ */
