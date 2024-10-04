@@ -96,30 +96,51 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 						fs.unlink(disbtn_png_path, () => { });
 
 						fs.unlink(pngPath, () => { });
-						vscode.window.showInformationMessage(message.filename + `下载完成`);
+						vscode.window.showInformationMessage(message.filename + `导入成功`);
 
-						// const options = {
-						// 	canSelectMany: true, // 允许多选
-						// 	openLabel: 'Select',
-						// 	filters: {
-						// 		'Text files': ['png'],
-						// 		'All files': ['*']
-						// 	}
-						// };
-						// vscode.window.showOpenDialog(options).then(fileUris => {
-						// 	if (fileUris && fileUris.length > 0) {
-						// 		fileUris.forEach(uri => {
-						// 			console.log('Selected file:', uri.fsPath);
-						// 		});
-						// 	} else {
-						// 		console.log('No files selected');
-						// 	}
-						// });
 					}
 				});
 				// console.log(text,message.filename);
 				return;
+			case "impor_png_data":
+				const options = {
+					canSelectMany: true, // 允许多选
+					openLabel: 'Select',
+					filters: {
+						'Text files': ['png'],
+						'All files': ['*']
+					}
+				};
+				vscode.window.showOpenDialog(options).then(fileUris => {
+					if (fileUris && fileUris.length > 0) {
+						fileUris.forEach(uri => {
+							const fileName = path.basename(uri.fsPath);
+							console.log('Selected file:', uri.fsPath,fileName);
+							let rootPath = getRootPath();
+							let pngPath =  uri.fsPath;
+							dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtons");
+							dirExists(rootPath + "/resource/ReplaceableTextures/PassiveButtons");
+							dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled");
+							let btn_name = fileName.substring(0, fileName.length - 4);
+							let btn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_btn.png", rootPath + "/resource/ReplaceableTextures/CommandButtons/BTN" + btn_name + ".png");
+							blp2Image(btn_png_path, btn_png_path.substring(-4) + ".blp", 'blp');
+							fs.unlink(btn_png_path, () => { });
 
+							let pasbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_pas.png", rootPath + "/resource/ReplaceableTextures/PassiveButtons/PASBTN" + btn_name + ".png");
+							blp2Image(pasbtn_png_path, pasbtn_png_path.substring(-4) + ".blp", 'blp');
+							fs.unlink(pasbtn_png_path, () => { });
+
+							let disbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_dis.png", rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled/DISBTN" + btn_name + ".png");
+							blp2Image(disbtn_png_path, disbtn_png_path.substring(-4) + ".blp", 'blp');
+							fs.unlink(disbtn_png_path, () => { });
+
+							vscode.window.showInformationMessage(fileName + `导入成功`);
+						});
+					} else {
+						console.log('No files selected');
+					}
+				});
+				return;
 		}
 
 	}, null, context.subscriptions);
