@@ -82,3 +82,19 @@ $(window).on('wheel', function(event) {
 		updateScroll();
 	}
 });
+
+$(document).ready(function() {
+	$('#importButton').hover(
+		function() {
+			$('#tooltip').show();
+		}, 
+		function() {
+			$('#tooltip').hide();
+		}
+	);
+
+	$('#importButton').click(function() {
+		// 这里可以添加按钮点击后的处理逻辑
+		console.log('Button clicked');
+	});
+});

@@ -11,14 +11,31 @@
 </head>
 
 <body>
+	
+	<div class="button-container">
+		<h4 id="tooltip" >导入自定义64x64png图片，将会自动处理亮暗图标</h4>
+        <input class="texture-type" id="importButton" type="button" value="导入">
+		<select id="dropdown" onchange="handleSelection()">
+			<option value="">边框方案1：默认</option>
+			<option value="option1">边框方案2：默认</option>
+			<option value="option2">边框方案3：默认</option>
+			<option value="option3">边框方案4：默认</option>
+			<option value="option4">边框方案5：默认</option>
+			<option value="option5">边框方案6：默认</option>
+			<option value="option6">边框方案7：默认</option>
+			<option value="option7">边框方案8：默认</option>
+			<option value="option8">边框方案9：默认</option>
+			<option value="option9">边框方案10：默认</option>
+			<option value="option10">边框方案11：默认</option>
+		</select>
+		默认>
+		<input class="texture-type selected" type="button" name="texture-type" value="ability" onclick="toggleType(this)">
+		<input class="texture-type" type="button" name="texture-type" value="item" onclick="toggleType(this)">
+		<input class="texture-type" type="button" name="texture-type" value="spell" onclick="toggleType(this)">
+		<input class="texture-type" type="button" name="texture-type" value="inv" onclick="toggleType(this)">
+		<input class="texture-type" type="button" name="texture-type" value="weapon" onclick="toggleType(this)">
+    </div>
 	<div class="search">
-		<div class="texture-type-content">
-			<input class="texture-type selected" type="button" name="texture-type" value="ability" onclick="toggleType(this)">
-			<input class="texture-type" type="button" name="texture-type" value="item" onclick="toggleType(this)">
-			<input class="texture-type" type="button" name="texture-type" value="spell" onclick="toggleType(this)">
-			<input class="texture-type" type="button" name="texture-type" value="inv" onclick="toggleType(this)">
-			<input class="texture-type" type="button" name="texture-type" value="weapon" onclick="toggleType(this)">
-		</div>
 		<div class="search-content">
 			<input id="filter" type="text" placeholder="搜索，只能搜索英文关键字" onkeydown="checkEnter(event)" >
 		</div>

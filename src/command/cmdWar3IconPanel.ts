@@ -97,6 +97,24 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 
 						fs.unlink(pngPath, () => { });
 						vscode.window.showInformationMessage(message.filename + `下载完成`);
+
+						// const options = {
+						// 	canSelectMany: true, // 允许多选
+						// 	openLabel: 'Select',
+						// 	filters: {
+						// 		'Text files': ['png'],
+						// 		'All files': ['*']
+						// 	}
+						// };
+						// vscode.window.showOpenDialog(options).then(fileUris => {
+						// 	if (fileUris && fileUris.length > 0) {
+						// 		fileUris.forEach(uri => {
+						// 			console.log('Selected file:', uri.fsPath);
+						// 		});
+						// 	} else {
+						// 		console.log('No files selected');
+						// 	}
+						// });
 					}
 				});
 				// console.log(text,message.filename);

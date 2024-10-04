@@ -213,3 +213,25 @@ body.vscode-dark {
 .item-texture-icon:active{
 	top: 2px;
 }
+h4 {
+	display: none;
+	position: absolute;
+	/* 可以根据需要调整位置 */
+	top: 15px;
+	left: 0;
+}
+.button-container {
+	position: relative;
+	display: inline-block;
+}
+
+#dropdown{
+	background: #252526;
+	color: white;
+	width: 172px;
+	height: 36px;
+	box-shadow: 4px 4px 10px #06070a;
+	outline-style: none;
+	border: 0px;
+	padding-left: 10px;
+}
