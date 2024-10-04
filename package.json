@@ -1,10 +1,12 @@
 {
   "name": "war3icon",
   "displayName": "war3icon",
-  "description": "oline icon lists",
+  "description": "在线war3图标库，可直接导入到项目中，自动生成量暗图标，支持方案边框设置，并支持自定义导入",
+  "icon": "images/gitlab-logo-128.png",
+  "publisher": "shiyue1023261581",
   "version": "0.0.1",
   "engines": {
-   	"vscode": "^1.58.0"
+    "vscode": "^1.58.0"
   },
   "categories": [
     "Other"
@@ -26,6 +28,41 @@
           "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "war3icon",
+      "properties": {
+        "war3icon.someSetting": {
+          "type": "string",
+          "default": "resource",
+          "description": "项目资源目录"
+        },
+        "war3icon.frameItems": {
+          "type": "array",
+          "description": "可用边框列表",
+          "items": {
+            "type": "string",
+            "description": "可用边框列表"
+          },
+          "default": [
+            "${插件路径}/images/bm_btn.png",
+            "${插件路径}/images/bm_dis.png",
+            "${插件路径}/images/bm_pas.png"
+          ]
+        },
+        "war3icon.keyValuePairs": {
+          "type": "object",
+          "description": "方案配置，第一个是亮，第二个是暗，第三个是被动，每个要用#号隔开",
+          "additionalProperties": {
+            "type": "string",
+            "description": "输入值"
+          },
+          "default": {
+            "方案1": "bm_btn.png#bm_dis.png#bm_pas.png"
+          }
+        }
+      }
     }
   },
   "scripts": {
