@@ -8,6 +8,7 @@ import { getWebviewContent } from '../utils/getWebViewContent';
 import { blp2Image, mergeImages } from './helper/blp2img';
 import { getRootPath } from "../utils/getRootPath";
 import { downHttpFile } from "../utils/fileUtils";
+import { dirExists } from '../utils/pathUtils';
 
 
 export async function war3IconPanel(context: vscode.ExtensionContext) {
@@ -76,6 +77,9 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 			case "down_file_to_blp":	// 下载文件，并转成blp
 				let rootPath = getRootPath();
 				let pngPath = rootPath + "/resource/ReplaceableTextures/CommandButtons/" + message.filename;
+				dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtons");
+				dirExists(rootPath + "/resource/ReplaceableTextures/PassiveButtons");
+				dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled");
 				downHttpFile(text, pngPath, function (code: number) {
 					if (code === 1) {
 						let btn_name = message.filename.substring(0, message.filename.length - 4);
