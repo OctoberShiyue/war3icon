@@ -53,7 +53,7 @@ function toggleType(btn) {
 function filter(btn,filename) {
 	vscode.postMessage({
 		type: 'down_file_to_blp',
-		text: btn.src,
+		text: btn.getAttribute("data-src"),
 		filename:filename,
 	});
 }

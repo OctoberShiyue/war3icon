@@ -38,7 +38,7 @@
           "default": "resource",
           "description": "项目资源目录"
         },
-        "war3icon.keyValuePairs": {
+        "war3icon.FramekeyValuePairs": {
           "type": "object",
           "description": "方案配置，第一个是亮，第二个是暗，第三个是被动，每个要用#号隔开",
           "additionalProperties": {
@@ -46,7 +46,7 @@
             "description": "输入值"
           },
           "default": {
-            "方案1": "${插件路径}/images/bm_btn.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png"
+            "方案1：默认": "${插件路径}/images/bm_btn.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png"
           }
         }
       }

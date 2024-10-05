@@ -23,6 +23,9 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 		}
 	);
 
+	//获取配置文件
+	let config_list=vscode.workspace.getConfiguration("war3icon").get<string>('FramekeyValuePairs');
+
 	let datalist: any[] = [];
 	let last_value: string = "";
 	async function update_html_data(value: string = "", page: number = 1) {
@@ -47,7 +50,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 							const element2 = element[index];
 							let url = "http://war3.newxd.cn" + element2.url;
 							let filename = element2.filename;
-							replaceText += `\t\t\t\t\t\t<img class="item-texture-icon" id = "items" src=` + url + ` alt='${filename}' onclick="filter(this,'${filename}')">\n`;
+							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon image-with-background"  id = "items" data-src='`+url+`' alt='${filename}' style="background-image: url('`+url+`');" onclick="filter(this,'${filename}')"></div>\n`;
 						}
 					}
 				}
@@ -55,6 +58,24 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 
 				panel.webview.postMessage({ type: 'updateitems', text: replaceText, last_page: response.data.data.last_page });
 			});
+
+			if (config_list) {
+				let replaceText = "";
+				for (const [key, value] of Object.entries(config_list)) {
+					let path=value.replaceAll("${插件路径}",__dirname.replaceAll("\\","/")+"/../..");
+		
+					let pathlist=path.split("#");
+					let images64list: string[]=[];
+					pathlist.forEach(element => {
+						const fileData = fs.readFileSync(element);
+						// 转换为Base64
+						const base64Data = "data:image/png;base64,"+fileData.toString('base64');
+						images64list.push(base64Data);
+					});
+					replaceText=replaceText+`<option value="${images64list.join("#")}">${key}</option>`;
+				}
+				html=html.replace("__替换__",replaceText);
+			}
 			return html;
 		});
 
