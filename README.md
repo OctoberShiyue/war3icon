@@ -1,5 +1,7 @@
 # war3icon README
 
+还差MD要写和 方案文件是否存在效验
+
 This is the README for your extension "war3icon". After writing up a brief description, we recommend including the following sections.
 
 ## Features
