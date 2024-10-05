@@ -52,7 +52,8 @@ function toggleType(btn) {
 //更新边框
 function updateFrame() {
 	var selectedOption = $('#dropdown option:selected');
-	var selectedCount = selectedOption.length;
+	var selectedCount = $('#dropdown option').length;
+	console.log(selectedCount);
 	$('.item-texture-icon').each(function() {
 		for (let index = 1; index <= selectedCount+1; index++) {
 			$(this).removeClass('image-with-background'+index);
