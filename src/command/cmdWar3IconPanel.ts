@@ -67,7 +67,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 		last_value = value;
 		// 页面内容
 		panel.webview.html = await getWebviewContent(panel.webview, context.extensionUri, "war3Icon", html => {
-			const response = axios.get("http://war3.newxd.cn/api/demo/getImagerList?limit=200&like=" + value + "&page=" + page, {
+			const response = axios.get("http://bt2.newxd.cn:5903/api/demo/getImagerList?limit=200&like=" + value + "&page=" + page, {
 				headers: {
 					'Content-Type': 'application/json',
 				}
@@ -81,7 +81,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 					if (element) {
 						for (let index = 0; index < element.length; index++) {
 							const element2 = element[index];
-							let url = "http://war3.newxd.cn" + element2.url;
+							let url = "http://bt2.newxd.cn:5903" + element2.url;
 							let filename:string = element2.filename;
 							let pngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + filename.substring(0,filename.length-4)+".blp";
 							// console.log(pngPath,filename,fs.existsSync(pngPath));
