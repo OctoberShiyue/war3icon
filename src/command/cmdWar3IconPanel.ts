@@ -37,9 +37,9 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 		}
 		let framedata = framelist[frameindex - 1];
 		let rootPath = getRootPath();
-		dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtons`);
-		dirExists(rootPath + `/${config_res}/ReplaceableTextures/PassiveButtons`);
-		dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtonsDisabled`);
+		await dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtons`);
+		await dirExists(rootPath + `/${config_res}/ReplaceableTextures/PassiveButtons`);
+		await dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtonsDisabled`);
 		let btn_name = filename.substring(0, filename.length - 4);
 		let btn_png_path = mergeImages(pngPath, framedata[0], rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + btn_name + ".png");
 		blp2Image(btn_png_path, btn_png_path.substring(0,btn_png_path.length-4) + ".blp", 'blp');
@@ -143,14 +143,21 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 		const text = message.text;
 		const page = message.page;
 		const frameindex = message.frameindex;
-
+		let rootPath = getRootPath();
+		if (!rootPath) {
+			vscode.window.showErrorMessage("请打开项目");
+			return;
+		}
+		if (!fs.existsSync(rootPath + `/${config_res}`)) {
+			vscode.window.showErrorMessage("没有resource目录");
+			return;
+		}
 		switch (type) {
-			case "update_html_data":	// 复制技能名
+			case "update_html_data":
 				update_html_data(text, page);
 				panel.webview.postMessage({ type: 'updateitemsfull' });
 				return;
 			case "down_file_to_blp":	// 下载文件，并转成blp
-				let rootPath = getRootPath();
 				let pngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/` + message.filename;
 				downHttpFile(text, pngPath, function (code: number) {
 					if (code === 1) {
