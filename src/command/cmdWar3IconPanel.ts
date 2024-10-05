@@ -150,7 +150,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 				let pngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/` + message.filename;
 				downHttpFile(text, pngPath, function (code: number) {
 					if (code === 1) {
-						toBlp(frameindex, pngPath, message.filename);
+						toBlp(frameindex, pngPath, message.filename,true);
 						vscode.window.showInformationMessage(message.filename + `导入成功`);
 					}
 				});
