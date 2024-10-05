@@ -67,7 +67,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 		last_value = value;
 		// 页面内容
 		panel.webview.html = await getWebviewContent(panel.webview, context.extensionUri, "war3Icon", html => {
-			const response = axios.get("http://war3.newxd.cn/api/demo/getImagerList?limit=5&like=" + value + "&page=" + page, {
+			const response = axios.get("http://war3.newxd.cn/api/demo/getImagerList?limit=200&like=" + value + "&page=" + page, {
 				headers: {
 					'Content-Type': 'application/json',
 				}

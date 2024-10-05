@@ -69,6 +69,7 @@ function filter(btn,filename) {
 		filename:filename,
 		frameindex:selectedOption.val(),
 	});
+	$(btn).find('#exisfile').css('display', '');
 }
 
 document.oncontextmenu = function (event) {
