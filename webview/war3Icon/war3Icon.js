@@ -57,15 +57,17 @@ function updateFrame() {
 		for (let index = 1; index <= selectedCount+1; index++) {
 			$(this).removeClass('image-with-background'+index);
 		}
-		$(this).addClass(selectedOption.val());
+		$(this).addClass("image-with-background"+selectedOption.val());
 	});
 }
 
 function filter(btn,filename) {
+	var selectedOption = $('#dropdown option:selected');
 	vscode.postMessage({
 		type: 'down_file_to_blp',
 		text: btn.getAttribute("data-src"),
 		filename:filename,
+		frameindex:selectedOption.val(),
 	});
 }
 
@@ -106,8 +108,10 @@ $(document).ready(function() {
 	);
 
 	$('#importButton').click(function() {
+		var selectedOption = $('#dropdown option:selected');
 		vscode.postMessage({
 			type: 'impor_png_data',
+			frameindex:selectedOption.val(),
 		});
 	});
 });

@@ -24,7 +24,39 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 	);
 
 	//获取配置文件
-	let config_list=vscode.workspace.getConfiguration("war3icon").get<string>('FramekeyValuePairs');
+	let config_list = vscode.workspace.getConfiguration("war3icon").get<string>('FramekeyValuePairs');
+	let config_res = vscode.workspace.getConfiguration("war3icon").get('rscPath');
+
+	async function toBlp(frameindex: number, pngPath: string, filename: string,is_remove_file:boolean=false) {
+		let framelist = [];
+		if (config_list) {
+			for (const [key, value] of Object.entries(config_list)) {
+				let path = value.replaceAll("${插件路径}", __dirname.replaceAll("\\", "/") + "/../..");
+				framelist.push(path.split("#"));
+			}
+		}
+		let framedata = framelist[frameindex - 1];
+		let rootPath = getRootPath();
+		dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtons`);
+		dirExists(rootPath + `/${config_res}/ReplaceableTextures/PassiveButtons`);
+		dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtonsDisabled`);
+		let btn_name = filename.substring(0, filename.length - 4);
+		let btn_png_path = mergeImages(pngPath, framedata[0], rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + btn_name + ".png");
+		blp2Image(btn_png_path, btn_png_path.substring(-4) + ".blp", 'blp');
+		fs.unlink(btn_png_path, () => { });
+
+		let pasbtn_png_path = mergeImages(pngPath, framedata[2], rootPath + `/${config_res}/ReplaceableTextures/PassiveButtons/PASBTN` + btn_name + ".png");
+		blp2Image(pasbtn_png_path, pasbtn_png_path.substring(-4) + ".blp", 'blp');
+		fs.unlink(pasbtn_png_path, () => { });
+
+		let disbtn_png_path = mergeImages(pngPath, framedata[1], rootPath + `/${config_res}/ReplaceableTextures/CommandButtonsDisabled/DISBTN` + btn_name + ".png");
+		blp2Image(disbtn_png_path, disbtn_png_path.substring(-4) + ".blp", 'blp');
+		fs.unlink(disbtn_png_path, () => { });
+
+		if (is_remove_file) {
+			fs.unlink(pngPath, () => { });
+		}
+	}
 
 	let datalist: any[] = [];
 	let last_value: string = "";
@@ -50,7 +82,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 							const element2 = element[index];
 							let url = "http://war3.newxd.cn" + element2.url;
 							let filename = element2.filename;
-							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon image-with-background1"  id = "items" data-src='`+url+`' alt='${filename}' style="background-image: url('`+url+`');" onclick="filter(this,'${filename}')"></div>\n`;
+							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon image-with-background1"  id = "items" data-src='` + url + `' alt='${filename}' style="background-image: url('` + url + `');" onclick="filter(this,'${filename}')"></div>\n`;
 						}
 					}
 				}
@@ -62,19 +94,19 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 			if (config_list) {
 				let replaceText = "";
 				let replaceTextStyle = "";
-				let id=0;
+				let id = 0;
 				for (const [key, value] of Object.entries(config_list)) {
 					id++;
-					let path=value.replaceAll("${插件路径}",__dirname.replaceAll("\\","/")+"/../..");
-					let pathlist=path.split("#");
-					let images64list: string[]=[];
+					let path = value.replaceAll("${插件路径}", __dirname.replaceAll("\\", "/") + "/../..");
+					let pathlist = path.split("#");
+					let images64list: string[] = [];
 					pathlist.forEach(element => {
 						const fileData = fs.readFileSync(element);
 						// 转换为Base64
-						const base64Data = "data:image/png;base64,"+fileData.toString('base64');
+						const base64Data = "data:image/png;base64," + fileData.toString('base64');
 						images64list.push(base64Data);
 					});
-					replaceTextStyle=replaceTextStyle+`
+					replaceTextStyle = replaceTextStyle + `
 					.image-with-background${id}::after {
 						content: "";
 						position: absolute;
@@ -88,10 +120,10 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 						pointer-events: none; /* 确保伪元素不会影响用户操作 */
 					}
 					`;
-					replaceText=replaceText+`<option value="image-with-background${id}">${key}</option>`;
+					replaceText = replaceText + `<option value="${id}">${key}</option>`;
 				}
-				html=html.replace("__替换__",replaceText);
-				html=html.replace("/*__style__*/",replaceTextStyle);
+				html = html.replace("__替换__", replaceText);
+				html = html.replace("/*__style__*/", replaceTextStyle);
 			}
 			return html;
 		});
@@ -100,12 +132,13 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 	update_html_data("");
 
 	// 监听消息
-	panel.webview.onDidReceiveMessage(async (message: { type: string, text: string, page: number, filename: string }) => {
+	panel.webview.onDidReceiveMessage(async (message: { type: string, text: string, page: number, filename: string, frameindex: number }) => {
 		console.log(message);
 
 		const type = message.type;
 		const text = message.text;
 		const page = message.page;
+		const frameindex = message.frameindex;
 
 		switch (type) {
 			case "update_html_data":	// 复制技能名
@@ -114,28 +147,11 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 				return;
 			case "down_file_to_blp":	// 下载文件，并转成blp
 				let rootPath = getRootPath();
-				let pngPath = rootPath + "/resource/ReplaceableTextures/CommandButtons/" + message.filename;
-				dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtons");
-				dirExists(rootPath + "/resource/ReplaceableTextures/PassiveButtons");
-				dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled");
+				let pngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/` + message.filename;
 				downHttpFile(text, pngPath, function (code: number) {
 					if (code === 1) {
-						let btn_name = message.filename.substring(0, message.filename.length - 4);
-						let btn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_btn.png", rootPath + "/resource/ReplaceableTextures/CommandButtons/BTN" + btn_name + ".png");
-						blp2Image(btn_png_path, btn_png_path.substring(-4) + ".blp", 'blp');
-						fs.unlink(btn_png_path, () => { });
-
-						let pasbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_pas.png", rootPath + "/resource/ReplaceableTextures/PassiveButtons/PASBTN" + btn_name + ".png");
-						blp2Image(pasbtn_png_path, pasbtn_png_path.substring(-4) + ".blp", 'blp');
-						fs.unlink(pasbtn_png_path, () => { });
-
-						let disbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_dis.png", rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled/DISBTN" + btn_name + ".png");
-						blp2Image(disbtn_png_path, disbtn_png_path.substring(-4) + ".blp", 'blp');
-						fs.unlink(disbtn_png_path, () => { });
-
-						fs.unlink(pngPath, () => { });
+						toBlp(frameindex, pngPath, message.filename);
 						vscode.window.showInformationMessage(message.filename + `导入成功`);
-
 					}
 				});
 				// console.log(text,message.filename);
@@ -153,27 +169,11 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 					if (fileUris && fileUris.length > 0) {
 						fileUris.forEach(uri => {
 							const fileName = path.basename(uri.fsPath);
-							console.log('Selected file:', uri.fsPath,fileName);
-							let rootPath = getRootPath();
-							let pngPath =  uri.fsPath;
-							dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtons");
-							dirExists(rootPath + "/resource/ReplaceableTextures/PassiveButtons");
-							dirExists(rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled");
-							let btn_name = fileName.substring(0, fileName.length - 4);
-							let btn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_btn.png", rootPath + "/resource/ReplaceableTextures/CommandButtons/BTN" + btn_name + ".png");
-							blp2Image(btn_png_path, btn_png_path.substring(-4) + ".blp", 'blp');
-							fs.unlink(btn_png_path, () => { });
-
-							let pasbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_pas.png", rootPath + "/resource/ReplaceableTextures/PassiveButtons/PASBTN" + btn_name + ".png");
-							blp2Image(pasbtn_png_path, pasbtn_png_path.substring(-4) + ".blp", 'blp');
-							fs.unlink(pasbtn_png_path, () => { });
-
-							let disbtn_png_path = mergeImages(pngPath, __dirname + "/../../images/bm_dis.png", rootPath + "/resource/ReplaceableTextures/CommandButtonsDisabled/DISBTN" + btn_name + ".png");
-							blp2Image(disbtn_png_path, disbtn_png_path.substring(-4) + ".blp", 'blp');
-							fs.unlink(disbtn_png_path, () => { });
-
-							vscode.window.showInformationMessage(fileName + `导入成功`);
+							console.log('Selected file:', uri.fsPath, fileName);
+							let pngPath = uri.fsPath;
+							toBlp(frameindex, pngPath, fileName);
 						});
+						vscode.window.showInformationMessage(`批量导入成功`);
 					} else {
 						console.log('No files selected');
 					}

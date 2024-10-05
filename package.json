@@ -33,7 +33,7 @@
       "type": "object",
       "title": "war3icon",
       "properties": {
-        "war3icon.someSetting": {
+        "war3icon.rscPath": {
           "type": "string",
           "default": "resource",
           "description": "项目资源目录"
