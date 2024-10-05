@@ -50,7 +50,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 							const element2 = element[index];
 							let url = "http://war3.newxd.cn" + element2.url;
 							let filename = element2.filename;
-							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon image-with-background"  id = "items" data-src='`+url+`' alt='${filename}' style="background-image: url('`+url+`');" onclick="filter(this,'${filename}')"></div>\n`;
+							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon image-with-background1"  id = "items" data-src='`+url+`' alt='${filename}' style="background-image: url('`+url+`');" onclick="filter(this,'${filename}')"></div>\n`;
 						}
 					}
 				}
@@ -61,9 +61,11 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 
 			if (config_list) {
 				let replaceText = "";
+				let replaceTextStyle = "";
+				let id=0;
 				for (const [key, value] of Object.entries(config_list)) {
+					id++;
 					let path=value.replaceAll("${插件路径}",__dirname.replaceAll("\\","/")+"/../..");
-		
 					let pathlist=path.split("#");
 					let images64list: string[]=[];
 					pathlist.forEach(element => {
@@ -72,9 +74,24 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 						const base64Data = "data:image/png;base64,"+fileData.toString('base64');
 						images64list.push(base64Data);
 					});
-					replaceText=replaceText+`<option value="${images64list.join("#")}">${key}</option>`;
+					replaceTextStyle=replaceTextStyle+`
+					.image-with-background${id}::after {
+						content: "";
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						z-index: 2; /* 背景层级更高 */
+						background-image: url('${images64list[0]}');
+						background-size: cover; /* 根据需要调整 */
+						pointer-events: none; /* 确保伪元素不会影响用户操作 */
+					}
+					`;
+					replaceText=replaceText+`<option value="image-with-background${id}">${key}</option>`;
 				}
 				html=html.replace("__替换__",replaceText);
+				html=html.replace("/*__style__*/",replaceTextStyle);
 			}
 			return html;
 		});

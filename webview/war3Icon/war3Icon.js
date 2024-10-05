@@ -49,6 +49,17 @@ function toggleType(btn) {
 	filter.value = btn.value;
 	updateData(btn.value);
 }
+//更新边框
+function updateFrame() {
+	var selectedOption = $('#dropdown option:selected');
+	var selectedCount = selectedOption.length;
+	$('.item-texture-icon').each(function() {
+		for (let index = 1; index <= selectedCount+1; index++) {
+			$(this).removeClass('image-with-background'+index);
+		}
+		$(this).addClass(selectedOption.val());
+	});
+}
 
 function filter(btn,filename) {
 	vscode.postMessage({
@@ -66,6 +77,7 @@ window.addEventListener('message', event => {
 	if (message.type === 'updateitems') {
 		$("#texture-content").html(message.text);
 		now_page = Math.min(now_page, message.last_page);
+		updateFrame();
 	}
 	if (message.type === 'updateitemsfull') {
 		is_update = null;
