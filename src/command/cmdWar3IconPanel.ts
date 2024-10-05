@@ -42,15 +42,15 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 		dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtonsDisabled`);
 		let btn_name = filename.substring(0, filename.length - 4);
 		let btn_png_path = mergeImages(pngPath, framedata[0], rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + btn_name + ".png");
-		blp2Image(btn_png_path, btn_png_path.substring(-4) + ".blp", 'blp');
+		blp2Image(btn_png_path, btn_png_path.substring(0,btn_png_path.length-4) + ".blp", 'blp');
 		fs.unlink(btn_png_path, () => { });
 
 		let pasbtn_png_path = mergeImages(pngPath, framedata[2], rootPath + `/${config_res}/ReplaceableTextures/PassiveButtons/PASBTN` + btn_name + ".png");
-		blp2Image(pasbtn_png_path, pasbtn_png_path.substring(-4) + ".blp", 'blp');
+		blp2Image(pasbtn_png_path, pasbtn_png_path.substring(0,pasbtn_png_path.length-4) + ".blp", 'blp');
 		fs.unlink(pasbtn_png_path, () => { });
 
 		let disbtn_png_path = mergeImages(pngPath, framedata[1], rootPath + `/${config_res}/ReplaceableTextures/CommandButtonsDisabled/DISBTN` + btn_name + ".png");
-		blp2Image(disbtn_png_path, disbtn_png_path.substring(-4) + ".blp", 'blp');
+		blp2Image(disbtn_png_path, disbtn_png_path.substring(0,disbtn_png_path.length-4) + ".blp", 'blp');
 		fs.unlink(disbtn_png_path, () => { });
 
 		if (is_remove_file) {
@@ -67,12 +67,13 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 		last_value = value;
 		// 页面内容
 		panel.webview.html = await getWebviewContent(panel.webview, context.extensionUri, "war3Icon", html => {
-			const response = axios.get("http://war3.newxd.cn/api/demo/getImagerList?limit=200&like=" + value + "&page=" + page, {
+			const response = axios.get("http://war3.newxd.cn/api/demo/getImagerList?limit=5&like=" + value + "&page=" + page, {
 				headers: {
 					'Content-Type': 'application/json',
 				}
 			});
 			response.then(async response => {
+				let rootPath = getRootPath();
 				datalist[page - 1] = response.data.data.data;
 				let replaceText = "";
 				for (let index = 0; index < datalist.length; index++) {
@@ -81,8 +82,11 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 						for (let index = 0; index < element.length; index++) {
 							const element2 = element[index];
 							let url = "http://war3.newxd.cn" + element2.url;
-							let filename = element2.filename;
-							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon image-with-background1"  id = "items" data-src='` + url + `' alt='${filename}' style="background-image: url('` + url + `');" onclick="filter(this,'${filename}')"></div>\n`;
+							let filename:string = element2.filename;
+							let pngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + filename.substring(0,filename.length-4)+".blp";
+							// console.log(pngPath,filename,fs.existsSync(pngPath));
+							
+							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon"  id = "items" data-src='` + url + `' alt='${filename}' style="background-image: url('` + url + `');" onclick="filter(this,'${filename}')"><div class="image-with-background-checkbox" id='exisfile' style="${fs.existsSync(pngPath)? "" : "display: none;"}" ></div></div>\n`;
 						}
 					}
 				}
