@@ -98,27 +98,29 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 			if (config_list) {
 				let replaceText = "";
 				let replaceTextStyle = "";
-				let id = 0;
+				let index = 0;
 				for (const [key, value] of Object.entries(config_list)) {
-					id++;
+					index++;
 					let path = value.replaceAll("${插件路径}", __dirname.replaceAll("\\", "/") + "/../..");
 					let pathlist = path.split("#");
 					let images64list: string[] = [];
 					let b=false;
 					if (pathlist.length===3) {
 						pathlist.forEach(imagepath => {
-							if (fs.existsSync(imagepath)) {
+							try {
 								const fileData = fs.readFileSync(imagepath);
 								const base64Data = "data:image/png;base64," + fileData.toString('base64');
 								images64list.push(base64Data);
 								b=true;
+							} catch (error) {
+								
 							}
 						});
 					}
 					
 					if (b) {
 						replaceTextStyle = replaceTextStyle + `
-						.image-with-background${id}::after {
+						.image-with-background${index}::after {
 							content: "";
 							position: absolute;
 							top: 0;
@@ -131,7 +133,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 							pointer-events: none; /* 确保伪元素不会影响用户操作 */
 						}
 						`;
-						replaceText = replaceText + `<option value="${id}">${key}</option>`;
+						replaceText = replaceText + `<option value="${index}">${key}</option>`;
 					}else{
 						vscode.window.showErrorMessage(`${key}配置方案有问题，请检查`);
 					}
