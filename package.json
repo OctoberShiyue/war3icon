@@ -1,7 +1,7 @@
 {
   "name": "war3icon",
   "displayName": "war3icon",
-  "description": "在线war3图标库，可直接导入到项目中，自动生成量暗图标，支持方案边框设置，并支持自定义导入",
+  "description": "在线war3图标库，可直接导入到项目中，自动生成亮暗图标，支持方案边框设置，并支持自定义导入",
   "icon": "images/logo-128.png",
   "publisher": "qq1023261581",
   "version": "0.0.1",
