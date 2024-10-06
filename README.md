@@ -17,7 +17,7 @@ npm install
 ## 打包
 npm install -g vsce
 
-vsce package
+vsce package --baseImagesUrl "https://github.com/OctoberShiyue/war3icon/raw/master"
 
 ## 感谢
 - [vscode-plugin-blp-preview](https://github.com/ilimei/vscode-plugin-blp-preview)

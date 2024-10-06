@@ -58,13 +58,19 @@
       }
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OctoberShiyue/war3icon.git"
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "prepub": "npm run package",
+    "package": "vsce package --baseImagesUrl https://github.com/OctoberShiyue/war3icon/tree/master"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.8",
