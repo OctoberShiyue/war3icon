@@ -104,27 +104,37 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 					let path = value.replaceAll("${插件路径}", __dirname.replaceAll("\\", "/") + "/../..");
 					let pathlist = path.split("#");
 					let images64list: string[] = [];
-					pathlist.forEach(element => {
-						const fileData = fs.readFileSync(element);
-						// 转换为Base64
-						const base64Data = "data:image/png;base64," + fileData.toString('base64');
-						images64list.push(base64Data);
-					});
-					replaceTextStyle = replaceTextStyle + `
-					.image-with-background${id}::after {
-						content: "";
-						position: absolute;
-						top: 0;
-						left: 0;
-						width: 100%;
-						height: 100%;
-						z-index: 2; /* 背景层级更高 */
-						background-image: url('${images64list[0]}');
-						background-size: cover; /* 根据需要调整 */
-						pointer-events: none; /* 确保伪元素不会影响用户操作 */
+					let b=false;
+					if (pathlist.length===3) {
+						pathlist.forEach(imagepath => {
+							if (fs.existsSync(imagepath)) {
+								const fileData = fs.readFileSync(imagepath);
+								const base64Data = "data:image/png;base64," + fileData.toString('base64');
+								images64list.push(base64Data);
+								b=true;
+							}
+						});
 					}
-					`;
-					replaceText = replaceText + `<option value="${id}">${key}</option>`;
+					
+					if (b) {
+						replaceTextStyle = replaceTextStyle + `
+						.image-with-background${id}::after {
+							content: "";
+							position: absolute;
+							top: 0;
+							left: 0;
+							width: 100%;
+							height: 100%;
+							z-index: 2; /* 背景层级更高 */
+							background-image: url('${images64list[0]}');
+							background-size: cover; /* 根据需要调整 */
+							pointer-events: none; /* 确保伪元素不会影响用户操作 */
+						}
+						`;
+						replaceText = replaceText + `<option value="${id}">${key}</option>`;
+					}else{
+						vscode.window.showErrorMessage(`${key}配置方案有问题，请检查`);
+					}
 				}
 				html = html.replace("__替换__", replaceText);
 				html = html.replace("/*__style__*/", replaceTextStyle);
