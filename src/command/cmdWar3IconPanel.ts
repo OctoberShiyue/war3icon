@@ -106,14 +106,17 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 					let images64list: string[] = [];
 					let b=false;
 					if (pathlist.length===3) {
+						let is_check_file_all=true;
 						pathlist.forEach(imagepath => {
 							try {
 								const fileData = fs.readFileSync(imagepath);
 								const base64Data = "data:image/png;base64," + fileData.toString('base64');
 								images64list.push(base64Data);
-								b=true;
 							} catch (error) {
-								
+								is_check_file_all=false;
+							}
+							if (is_check_file_all) {
+								b=true;
 							}
 						});
 					}
