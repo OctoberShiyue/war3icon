@@ -52,8 +52,7 @@
             "方案4：A": "${插件路径}/images/bm_btnA.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
             "方案5：S": "${插件路径}/images/bm_btnS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
             "方案6：SS": "${插件路径}/images/bm_btnSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
-            "方案7：SSS": "${插件路径}/images/bm_btnSSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
-            "方案8：ZS": "${插件路径}/images/bm_btnZS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png"
+            "方案7：SSS": "${插件路径}/images/bm_btnSSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png"
           }
         }
       }
