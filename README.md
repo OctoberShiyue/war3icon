@@ -1,73 +1,22 @@
-# war3icon README
+# war3icon
 
-还差MD要写和 方案文件是否存在效验
+## 特点
+在线2.1W个魔兽世界图标合集，可以方便转换边框方案，点击就能自动生成对应的亮，暗，被动图标的BLP，也能批量导入png图标
 
-This is the README for your extension "war3icon". After writing up a brief description, we recommend including the following sections.
+## 使用教程
+右上角既可打开，搜索功能之支持英文的，目前所有图标没有好好分列，有空再说！
 
-## Features
+## 效果
+![效果图1](images/image1.png)
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+![效果图2](images/image2.png)
 
-For example if there is an image subfolder under your extension project workspace:
 
-\!\[feature X\]\(images/feature-x.png\)
+## 感谢
+- [vscode-plugin-blp-preview](https://github.com/ilimei/vscode-plugin-blp-preview)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## 其他
 
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- 欢迎意见和建议
+- 欢迎pr 
+- QQ1023261581
