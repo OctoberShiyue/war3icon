@@ -40,7 +40,7 @@
         },
         "war3icon.FramekeyValuePairs": {
           "type": "object",
-          "description": "方案配置，第一个是亮，第二个是暗，第三个是被动，每个要用#号隔开",
+          "description": "方案配置，第一个是亮，第二个是暗，第三个是被动，每个要用#号隔开【插件路径：C:\\Users\\用户\\.vscode\\extensions\\shiyueqq1023261581.war3icon-0.0.1】",
           "additionalProperties": {
             "type": "string",
             "description": "输入值"
@@ -52,7 +52,8 @@
             "方案4：A": "${插件路径}/images/bm_btnA.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
             "方案5：S": "${插件路径}/images/bm_btnS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
             "方案6：SS": "${插件路径}/images/bm_btnSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
-            "方案7：SSS": "${插件路径}/images/bm_btnSSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png"
+            "方案7：SSS": "${插件路径}/images/bm_btnSSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
+            "方案99：原图": "原图"
           }
         }
       }
