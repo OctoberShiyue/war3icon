@@ -29,20 +29,25 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 
 	async function toBlp(frameindex: number, pngPath: string, filename: string,is_remove_file:boolean=false) {
 		let framelist = [];
+		let framekeylist = [];
 		if (config_list) {
 			for (const [key, value] of Object.entries(config_list)) {
 				let path = value.replaceAll("${插件路径}", __dirname.replaceAll("\\", "/") + "/../..");
+				path=path.replaceAll("${项目路径}", (getRootPath() || "").replaceAll("\\", "/"));
 				framelist.push(path.split("#"));
+				framekeylist.push(key);
 			}
 		}
 		let framedata = framelist[frameindex - 1];
+		let keyname=framekeylist[frameindex - 1];
 		let rootPath = getRootPath();
 		await dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtons`);
 		await dirExists(rootPath + `/${config_res}/ReplaceableTextures/PassiveButtons`);
 		await dirExists(rootPath + `/${config_res}/ReplaceableTextures/CommandButtonsDisabled`);
-		if (framedata[0]=="原图") {
+		
+		if (keyname=="原图") {
 			let btn_name = filename.substring(0, filename.length - 4);
-			let btn_png_path = mergeImages(pngPath, framedata[0], rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + btn_name + ".png");
+			let btn_png_path = mergeImages(pngPath, framedata[0], rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/` + btn_name + ".png");
 		}else{
 			let btn_name = filename.substring(0, filename.length - 4);
 			let btn_png_path = mergeImages(pngPath, framedata[0], rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + btn_name + ".png");
@@ -91,7 +96,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 							let pngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + filename.substring(0,filename.length-4)+".blp";
 							// console.log(pngPath,filename,fs.existsSync(pngPath));
 							
-							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon"  id = "items" data-src='` + url + `' alt='${filename}' style="background-image: url('` + url + `');" onclick="filter(this,'${filename}')"><div class="image-with-background-checkbox" id='exisfile' style="${fs.existsSync(pngPath)? "" : "display: none;"}" ></div></div>\n`;
+							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon"  id = "items" data-src='` + url + `' alt='${filename}' title='${filename}' style="background-image: url('` + url + `');" onclick="filter(this,'${filename}')"><div class="image-with-background-checkbox" id='exisfile' style="${fs.existsSync(pngPath)? "" : "display: none;"}" ></div></div>\n`;
 						}
 					}
 				}
@@ -107,6 +112,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 				for (const [key, value] of Object.entries(config_list)) {
 					index++;
 					let path = value.replaceAll("${插件路径}", __dirname.replaceAll("\\", "/") + "/../..");
+					path=path.replaceAll("${项目路径}", (getRootPath() || "").replaceAll("\\", "/"));
 					let pathlist = path.split("#");
 					let images64list: string[] = [];
 					let b=false;

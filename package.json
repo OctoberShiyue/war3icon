@@ -4,7 +4,7 @@
   "description": "在线war3图标库，可直接导入到项目中，自动生成亮暗图标，支持方案边框设置，并支持自定义导入",
   "icon": "images/logo-128.png",
   "publisher": "shiyueqq1023261581",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.93.0"
   },
@@ -53,7 +53,10 @@
             "方案5：S": "${插件路径}/images/bm_btnS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
             "方案6：SS": "${插件路径}/images/bm_btnSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
             "方案7：SSS": "${插件路径}/images/bm_btnSSS.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
-            "方案99：原图": "原图"
+            "透明": "${插件路径}/images/bm_tm.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
+            "原图": "${插件路径}/images/bm_tm.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png",
+            "------------分割线------------": "${插件路径}/images/bm_btn.png#${插件路径}/images/bm_dis.png#${插件路径}/images/bm_pas.png"
+            
           }
         }
       }
