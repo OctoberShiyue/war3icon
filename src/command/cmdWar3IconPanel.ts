@@ -34,6 +34,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 			for (const [key, value] of Object.entries(config_list)) {
 				let path = value.replaceAll("${插件路径}", __dirname.replaceAll("\\", "/") + "/../..");
 				path=path.replaceAll("${项目路径}", (getRootPath() || "").replaceAll("\\", "/"));
+				console.log(path);
 				framelist.push(path.split("#"));
 				framekeylist.push(key);
 			}
@@ -96,7 +97,7 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 							let pngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/BTN` + filename.substring(0,filename.length-4)+".blp";
 							// console.log(pngPath,filename,fs.existsSync(pngPath));
 							
-							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon"  id = "items" data-src='` + url + `' alt='${filename}' title='${filename}' style="background-image: url('` + url + `');" onclick="filter(this,'${filename}')"><div class="image-with-background-checkbox" id='exisfile' style="${fs.existsSync(pngPath)? "" : "display: none;"}" ></div></div>\n`;
+							replaceText += `\t\t\t\t\t\t<div class="item-texture-icon"  id = "items" data-src='` + url + `' alt='${filename}' title='${filename}' style="background-image: url('` + url + `');" onclick="filter(this,'${filename}')" oncontextmenu="return exportWithCustomName(event, this, '${filename}')"><div class="image-with-background-checkbox" id='exisfile' style="${fs.existsSync(pngPath)? "" : "display: none;"}" ></div></div>\n`;
 						}
 					}
 				}
@@ -192,6 +193,33 @@ export async function war3IconPanel(context: vscode.ExtensionContext) {
 					}
 				});
 				// console.log(text,message.filename);
+				return;
+			case "custom_name_to_blp":
+				const defaultFilename = message.filename || "icon.png";
+				const defaultFilenameWithoutExt = defaultFilename.replace(/\.[^./\\]+$/, '');
+				const customFilenameInput = await vscode.window.showInputBox({
+					prompt: '请输入导出文件名',
+					placeHolder: '例如：BTNMyIcon.png',
+					value: defaultFilenameWithoutExt,
+					validateInput: (value) => {
+						if (!value.trim()) {
+							return '文件名不能为空';
+						}
+						return null;
+					}
+				});
+				if (!customFilenameInput) {
+					return;
+				}
+
+				const customFilename = customFilenameInput.trim().replace(/\.[^./\\]+$/, '') + '.png';
+				let customPngPath = rootPath + `/${config_res}/ReplaceableTextures/CommandButtons/` + customFilename;
+				downHttpFile(text, customPngPath, function (code: number) {
+					if (code === 1) {
+						toBlp(frameindex, customPngPath, customFilename, true);
+						vscode.window.showInformationMessage(customFilename + `导入成功`);
+					}
+				});
 				return;
 			case "impor_png_data":
 				const options = {

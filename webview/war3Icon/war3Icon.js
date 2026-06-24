@@ -73,6 +73,20 @@ function filter(btn,filename) {
 	$(btn).find('#exisfile').css('display', '');
 }
 
+function exportWithCustomName(event, btn, filename) {
+	event.preventDefault();
+	event.stopPropagation();
+	var selectedOption = $('#dropdown option:selected');
+	vscode.postMessage({
+		type: 'custom_name_to_blp',
+		text: btn.getAttribute("data-src"),
+		filename: filename,
+		frameindex: selectedOption.val(),
+	});
+	$(btn).find('#exisfile').css('display', '');
+	return false;
+}
+
 document.oncontextmenu = function (event) {
 	event.preventDefault();
 };
